@@ -12,6 +12,15 @@
 				"enablePullDownRefresh": false
 			}
 		}
+        ,{
+            "path" : "pages/rankdetail/rankdetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
