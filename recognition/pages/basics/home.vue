@@ -2,16 +2,16 @@
 	<view class="common-page">
 		<view class="u-demo-block mb20">
 			<u-swiper :list="swiperList" height=200 previousMargin="30" nextMargin="30" circular :autoplay="true"
-			@click="getDetails"
-				radius="5" bgColor="#ffffff"></u-swiper>
+				@click="getDetails" radius="5" bgColor="#ffffff"></u-swiper>
 		</view>
 		<view class="veg-name" style="animation: show 1.2s 1">
-			一、蔬菜类：
+			蔬菜类
 		</view>
 		<view class="nav-list" v-if="vegetables.length>0">
-			<navigator hover-class='none' :url="'/pages/home-details/home-details?keyName=' + item.title+',vegetables'" class="nav-li"
-				navigateTo :class="'bg-'+item.color" :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]"
-				v-for="(item,index) in vegetables" :key="index">
+			<navigator hover-class='none' :url="'/pages/home-details/home-details?keyName=' + item.title+',vegetables'"
+				class="nav-li" navigateTo :class="'bg-'+item.color"
+				:style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]" v-for="(item,index) in vegetables"
+				:key="index">
 				<view class="nav-title">{{item.title}}</view>
 				<view class="nav-name">{{item.name}}</view>
 				<text :class="'cuIcon-' + item.cuIcon"></text>
@@ -19,12 +19,13 @@
 		</view>
 
 		<view class="fru-name" style="animation: show 3.2s 1">
-			二、水果类：
+			水果类
 		</view>
 		<view class="nav-list" v-if="fruits.length>0">
-			<navigator hover-class='none' :url="'/pages/home-details/home-details?keyName=' + item.title+',fruits'" class="nav-li"
-				navigateTo :class="'bg-'+item.color" :style="[{animation: 'show ' + ((index+10)*0.2+1) + 's 1'}]"
-				v-for="(item,index) in fruits" :key="index">
+			<navigator hover-class='none' :url="'/pages/home-details/home-details?keyName=' + item.title+',fruits'"
+				class="nav-li" navigateTo :class="'bg-'+item.color"
+				:style="[{animation: 'show ' + ((index+10)*0.2+1) + 's 1'}]" v-for="(item,index) in fruits"
+				:key="index">
 				<view class="nav-title">{{item.title}}</view>
 				<view class="nav-name">{{item.name}}</view>
 				<text :class="'cuIcon-' + item.cuIcon"></text>
@@ -38,9 +39,9 @@
 		data() {
 			return {
 				swiperList: [
-					'/static/swiper1.jpeg',
-					'/static/swiper2.jpeg',
-					'/static/swiper4.jpeg',
+					'https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/swiper1.jpeg',
+					'https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/swiper2.jpeg',
+					'https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/swiper4.jpeg',
 				],
 				vegetables: [],
 				fruits: []
@@ -135,8 +136,8 @@
 			]
 
 		},
-		methods:{
-			getDetails(ev){
+		methods: {
+			getDetails(ev) {
 				console.log(ev);
 			}
 		}
@@ -153,16 +154,23 @@
 		.fru-name {
 			font-size: 46rpx;
 			font-weight: 600;
+			border-radius: 8rpx;
+			width: 440rpx;
+			margin: 0 auto;
 			margin-bottom: 40rpx;
-			padding-left: 40rpx;
+			padding: 0 40rpx;
+			display: flex;
+			justify-content: center;
 		}
 
 		.veg-name {
 			color: #6739b6;
+			box-shadow: 4rpx 4rpx 16rpx #6739b6, -4rpx -4rpx 16rpx #e9e9e9;
 		}
 
 		.fru-name {
 			color: #8799a3;
+			box-shadow: 4rpx 4rpx 16rpx #8799a3, -4rpx -4rpx 16rpx #e9e9e9;
 		}
 	}
 </style>

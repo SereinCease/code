@@ -128,17 +128,21 @@
 	.common-page {
 		width: 100vw;
 		padding: 0;
-		height: calc(100vh - (100rpx + env(safe-area-inset-bottom) / 2));
+		height: calc(100vh - (112rpx + env(safe-area-inset-bottom) / 2));
 		margin: 0;
-		background-color: #fff;
+		background-color: #f2f2f2;
 		overflow: auto;
+		&::after{
+			display: table;
+			content: '';
+		}
 	}
 	.common-detail {
 		width: 100vw;
 		padding: 0;
 		height: 100vh;
 		margin: 0;
-		background-color: #fff;
+		background-color: #f2f2f2;
 		overflow: auto;
 	}
 
@@ -159,6 +163,7 @@
 		background-position: center;
 		position: relative;
 		z-index: 1;
+		box-shadow: 10rpx 10rpx 12rpx #7d7d7d, -10rpx -10rpx 12rpx #e9e9e9;
 	}
 
 	.nav-li::after {

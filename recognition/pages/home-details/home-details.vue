@@ -283,7 +283,7 @@
 			margin-right: 20rpx;
 			margin-bottom: 20rpx;
 			width: calc(50% - 12rpx);
-
+			box-shadow: 8rpx 8rpx 20rpx #7d7d7d, -8rpx -8rpx 20rpx #e9e9e9;
 			&:nth-of-type(2n) {
 				margin-right: 0;
 			}

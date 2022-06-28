@@ -1,128 +1,80 @@
 <template>
 	<view class="common-page">
-		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<view class="title">
-			今日推荐水果
-		</view>
-		<u-scroll-list @right="right" @left="left">
-			<view class="scroll-list" style="flex-direction: row;">
-				<view class="scroll-list__goods-item" v-for="(item, index) in list" :key="index"
-					:class="[(index === 9) && 'scroll-list__goods-item--no-margin-right']">
-					<image class="scroll-list__goods-item__image" :src="item.thumb"></image>
-					<text class="scroll-list__goods-item__text">{{ item.price }}</text>
-				</view>
-				<view class="scroll-list__show-more">
-					<text class="scroll-list__show-more__text">查看更多</text>
-					<u-icon name="arrow-leftward" color="#f56c6c" size="12"></u-icon>
-				</view>
-			</view>
-		</u-scroll-list>
-		<view class="title">
-			今日推荐蔬菜
-		</view>
-		<view>
-			<u-grid :border="true" col="3">
-				<u-grid-item v-for="(listItem,listIndex) in list1" :key="listIndex">
-					<u-icon :customStyle="{paddingTop:20+'rpx'}" :name="listItem.name" :size="22"></u-icon>
-					<text class="grid-text">{{listItem.title}}</text>
-				</u-grid-item>
-			</u-grid>
-			<u-toast ref="uToast" />
-		</view>
-		<view class="showImg">
-			<!-- <image v-if="imageSrc==''"  src="/static/show_img.png" mode=""></image> -->
-			<image v-if="imageSrc!==''" :src="imageSrc" mode="" mode=""></image>
-		</view>
 		<view class="title">
 			识别蔬菜水果
 		</view>
-		<!-- <view v-if="result==''" class="show_name">橙子</view>
-		<view v-if="result!==''" class="show_name">{{result}}</view> -->
-		<u-popup :show="show" mode="bottom" @close="close" @open="open" :round="20">
-			<view class="container1">
-
-				<image src="/static/相机.png" mode="" @click="clickMe('camera')" class="left"></image>
-				<image src="/static/上传.png" mode="" @click="clickMe('album')" class="right"></image>
-				<!-- <button @click="clickMe('album')">相册</button>
-				
-					
-				        <button @click="clickMe('camera')">拍照</button>
-				<!-- <view class="text1">点我拍照</view>
-				<view class="text2">点我上传</view> -->
+		<view class="center-clock">
+			<view class="tips">
+				请珍惜时间
 			</view>
-
-		</u-popup>
-		<view class="contain_camera_img">
-			<image class="camera_img" src="/static/camera1.jpeg" @click="show = true"></image>
+			<view class="clock-area">
+				<cu-clock></cu-clock>
+			</view>
 		</view>
 
-		
+
+		<u-popup :show="show" mode="bottom" @close="close" @open="open" :round="20">
+			<view class="container1">
+				<view class="item-list">
+					<image src="https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/take photos.png" mode=""
+						@click="clickMe('camera')" class="left"></image>
+					<view class="tis-name">
+						Camera
+					</view>
+				</view>
+
+				<view class="item-list">
+					<image src="https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/kedaya.png" mode=""
+						@click="clickMe('album')" class="right"></image>
+					<view class="tis-name">
+						Select a graph
+					</view>
+				</view>
+			</view>
+		</u-popup>
+		<view class="contain_camera_img" v-if="!imgShow&&!isLoading">
+			<image class="camera_img" src="/static/camera.jpeg" @click="show = true"></image>
+		</view>
+		<view class="camera-loading" v-if="isLoading">
+			<cu-loading></cu-loading>
+		</view>
+		<view class="show-area" v-if="imgShow&&!isLoading">
+			<!-- <view class="show-area"> -->
+			<view class="showtime-image">
+				<img :src="imageSrc" class="camera_img" @click="show = true" alt="" srcset="">
+			</view>
+			<view class="result-area">
+				结果：{{result}}
+			</view>
+			<view class="show-footer">
+				<view class="reset" :class="isClick?'active-shadow':''" @click="clickFocus('isClick')">
+					RESET
+				</view>
+				<view class="again" :class="isClick2?'active-shadow':''" @click="clickFocus('isClick2')">
+					AGAIN
+				</view>
+			</view>
+		</view>
 
 
-		<!-- <button @click="clickMe2">点我2</button> -->
-		<!-- <image v-if="imageSrc!==''" :src="imageSrc" mode=""></image> -->
-		<div v-if="announce!==''">{{announce}}</div>
 	</view>
 </template>
 
 <script>
+	import cuClock from '@/colorui/components/cu-clock.vue'
 	export default {
+		components: {
+			cuClock
+		},
 		data() {
 			return {
 				show: false,
 				imageSrc: '',
-				announce: '',
 				result: '',
-				list: [{
-					price: '樱桃',
-					thumb: 'https://cdn.uviewui.com/uview/goods/1.jpg'
-				}, {
-					price: '菠萝',
-					thumb: 'https://cdn.uviewui.com/uview/goods/2.jpg'
-				}, {
-					price: '西瓜',
-					thumb: 'https://cdn.uviewui.com/uview/goods/6.jpg'
-				}, {
-					price: '苹果',
-					thumb: 'https://cdn.uviewui.com/uview/goods/5.jpg'
-				}, {
-					price: '草莓',
-					thumb: 'https://cdn.uviewui.com/uview/goods/2.jpg'
-				}, {
-					price: '荔枝',
-					thumb: 'https://cdn.uviewui.com/uview/goods/3.jpg'
-				}, {
-					price: '梨',
-					thumb: 'https://cdn.uviewui.com/uview/goods/4.jpg'
-				}, {
-					price: '桃子',
-					thumb: 'https://cdn.uviewui.com/uview/goods/1.jpg'
-				}],
-				list1: [{
-						name: 'photo',
-						title: '白菜'
-					},
-					{
-						name: 'lock',
-						title: '黄瓜'
-					},
-					{
-						name: 'star',
-						title: '西红柿'
-					},
-					{
-						name: 'hourglass',
-						title: '油麦菜'
-					},
-					{
-						name: 'home',
-						title: '茄子'
-					},
-					{
-						name: 'star',
-						title: '红薯'
-					},
-				],
+				imgShow: false,
+				isLoading: false,
+				isClick: false,
+				isClick2: false,
 			}
 		},
 		onLoad() {
@@ -139,7 +91,9 @@
 						// tempFilePath可以作为img标签的src属性显示图片
 						const tempFiles = res.tempFilePaths[0]
 						$that.imageSrc = ''
-						console.log(res);
+						$that.show = false
+						$that.imgShow = false
+						$that.isLoading = true
 						uni.uploadFile({
 							url: 'https://www.rainlotus.cc:5000/upload', //仅为示例，非真实的接口地址
 							filePath: tempFiles, //res.tempFilepaths
@@ -147,42 +101,47 @@
 								"Content-Type": "multipart/form-data"
 							},
 							name: 'file', // 文件对应的key ，默认 为 file
-							// formData: {
-							//   'user': 'test'
-							// }, //上传额外携带的参数
 							success(res) {
 								const data = JSON.parse(res.data)
 								console.log(data);
 								if (data.code === '200') {
 									$that.imageSrc = data.url
 									$that.result = data.result
+									$that.imgShow = true
 									console.log(data.result);
 								} else {
 									$that.result = data.msg
+									$that.imageSrc =
+										'https://cdn.jsdelivr.net/gh/rainlotus97/images/data/2022-06-28/warning.png'
+									$that.imgShow = true
 									console.log(data.msg)
 								}
+								$that.isLoading = false
 							},
 							fail: () => {
 								uni.showToast("图片上传失败，请联系开发！")
+								$that.isLoading = false
 							},
 						})
+					},
+					fail() {
+						$that.show = false
 					}
 				})
 			},
-			clickMe2() {
-				const $that = this
-				uni.request({
-					url: 'https://www.rainlotus.cc:5000/caigou',
-					method: "POST",
-					data: {
-						name: "王元",
-						age: "18"
-					},
-					success(res) {
-						console.log(res.data);
-						$that.announce = res.data.result
-					}
-				})
+			clickFocus(ev) {
+				this[ev] = true
+				setTimeout(() => {
+					this[ev] = false
+				}, 200)
+				if (ev === 'isClick') {
+					setTimeout(() => {
+						this.imgShow = false
+						this.imageSrc = ''
+					}, 250)
+				} else {
+					this.show = true
+				}
 			},
 			open() {
 				// console.log('open');
@@ -200,61 +159,45 @@
 			click(name) {
 				this.$refs.uToast.success(`点击了第${name}个`)
 			},
-			
-		}
+		},
 	}
 </script>
 
-<style lang="scss">
-	.scroll-list {
-		@include flex(column);
+<style lang="scss" scoped>
+	.center-clock {
+		margin-top: 40rpx;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		padding: 0 60rpx;
+		margin-bottom: 40rpx;
 
-		&__goods-item {
-			margin-right: 20px;
-
-			&__image {
-				width: 60px;
-				height: 60px;
-				border-radius: 4px;
-			}
-
-			&__text {
-				color: #f56c6c;
-				text-align: center;
-				font-size: 12px;
-				margin-top: 5px;
-			}
+		.tips {
+			margin-right: 80rpx;
+			font-weight: 800;
+			font-size: 40rpx;
+			font-family: '楷体'
 		}
 
-		&__show-more {
-			background-color: #fff0f0;
-			border-radius: 3px;
-			padding: 3px 6px;
-			@include flex(column);
-			align-items: center;
-
-			&__text {
-				font-size: 12px;
-				width: 12px;
-				color: #f56c6c;
-				line-height: 16px;
-			}
+		.clock-area {
+			width: 300rpx;
+			height: 300rpx;
 		}
 	}
 
-	.grid-text {
-	        font-size: 14px;
-	        color: #909399;
-	        padding: 10rpx 0 20rpx 0rpx;
-	        /* #ifndef APP-PLUS */
-	        box-sizing: border-box;
-	        /* #endif */
-			}
 	.title {
 		font-size: 46rpx;
 		font-weight: 600;
+		width: 440rpx;
+		margin: 0 auto;
+		padding: 10rpx 40rpx;
 		margin-bottom: 40rpx;
-		padding-left: 40rpx;
+		margin-top: 40rpx;
+		display: flex;
+		border-radius: 8rpx;
+		justify-content: center;
+		color: #2f2f51 !important;
+		box-shadow: 4rpx 4rpx 16rpx #8799a3, -4rpx -4rpx 16rpx #e9e9e9;
 	}
 
 
@@ -271,7 +214,7 @@
 		justify-content: center;
 	}
 
-	
+
 
 	.text-area {
 		display: flex;
@@ -308,9 +251,17 @@
 
 	}
 
+	.camera-loading {
+		width: 616rpx;
+		margin: 0 auto;
+		border-radius: 8rpx;
+		overflow: hidden;
+	}
+
 	.camera_img {
-		height: 200px;
-		weight: 800px;
+		weight: 680rpx !important;
+		border-radius: 8rpx;
+		box-shadow: 4rpx 4rpx 16rpx #8799a3, -4rpx -4rpx 16rpx #e9e9e9;
 	}
 
 	.show_name {
@@ -320,21 +271,117 @@
 		justify-content: center;
 	}
 
+	.show-area {
+
+		.showtime-image {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.result-area {
+			margin-top: 40rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 60rpx;
+			font-weight: 800;
+			font-family: '楷体';
+		}
+
+		.show-footer {
+			margin-top: 40rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.reset {
+				width: 200rpx;
+				font-family: '楷体';
+				font-weight: 600;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 40rpx;
+				letter-spacing: 4rpx;
+				padding: 18rpx 20rpx;
+				text-decoration: none;
+				color: #77c6ff;
+				font-size: 40rpx;
+				border-radius: 50px;
+				box-shadow: -4rpx -4rpx 16rpx rgba(255, 255, 255, 1), -4rpx -4rpx 24rpx rgba(255, 255, 255, 0.5), inset 4rpx 4rpx 8rpx rgba(255, 255, 255, 0.1), 4rpx 4rpx 16rpx rgba(0, 0, 0, 0.15);
+			}
+
+			.again {
+				width: 200rpx;
+				font-family: '楷体';
+				font-weight: 600;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 40rpx;
+				letter-spacing: 4rpx;
+				padding: 18rpx 20rpx;
+				text-decoration: none;
+				color: #fb7a0c;
+				margin-left: 80rpx;
+				font-size: 40rpx;
+				border-radius: 50px;
+				box-shadow: -4rpx -4rpx 16rpx rgba(255, 255, 255, 1), -4rpx -4rpx 24rpx rgba(255, 255, 255, 0.5), inset 4rpx 4rpx 8rpx rgba(255, 255, 255, 0.1), 4rpx 4rpx 16rpx rgba(0, 0, 0, 0.15);
+			}
+
+			.active-shadow {
+				box-shadow: inset -4rpx -4rpx 16rpx rgba(255, 255, 255, 1),
+					inset -4rpx -4rpx 24rpx rgba(255, 255, 255, 0.5),
+					inset 4rpx 4rpx 4px rgba(255, 255, 255, 0.1),
+					inset 4rpx 4rpx 16rpx rgba(0, 0, 0, 0.15);
+			}
+		}
+	}
+
 	.container1 {
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		height: 100px;
+		height: 400rpx;
+
+		.item-list {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			.tis-name {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 28rpx;
+				font-family: '楷体';
+				font-weight: 600;
+				margin-top: 20rpx;
+			}
+		}
 	}
 
 	.left {
-		height: 80px;
-		width: 80px;
-
+		height: 160rpx;
+		width: 160rpx;
+		border-radius: 50%;
 	}
 
 	.right {
-		height: 80px;
-		width: 80px;
+		height: 160rpx;
+		width: 160rpx;
+		border-radius: 50%;
+	}
+
+	@keyframes clock {
+		0% {
+			rotate: -90deg;
+			// transform: rotate(0deg );
+		}
+
+		100% {
+			rotate: 270deg;
+		}
 	}
 </style>

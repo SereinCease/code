@@ -15,6 +15,9 @@ Vue.component('plugin', plugin)
 
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom', cuCustom)
+
+import cuLoading from './colorui/components/cu-loading.vue'
+Vue.component('cu-loading', cuLoading)
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
