@@ -20,7 +20,7 @@
 		</view>
 
 		<view class="">
-			<u-collapse @change="change" @close="close" @open="open" v-if="islogin">
+			<u-collapse v-if="islogin">
 				<u-collapse-item icon="man-add" title="剩余次数" name="Docs guide">
 					<text class="u-collapse-content">您的剩余次数还有{{rightsNum}}次</text>
 				</u-collapse-item>
