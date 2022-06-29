@@ -56,7 +56,6 @@
 			</view>
 		</view>
 
-
 	</view>
 </template>
 
@@ -75,14 +74,38 @@
 				isLoading: false,
 				isClick: false,
 				isClick2: false,
+				userId:0,
+				rightsNum:0,
+				username:''
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			this.getRights()
 		},
 		methods: {
+			getRights(){
+				const user=uni.getStorageSync('token')
+				if (user) {
+					this.userId=user.id
+					this.rightsNum=user.rightsNum
+					this.username=user.username
+				}
+			},
 			clickMe(val) {
 				const $that = this
+				if (this.userId===0) {
+					uni.showToast({
+						title:"请登录！",
+						duration:1000
+					})
+					return
+				} else if(this.rightsNum===0){
+					uni.showToast({
+						title:"权益数不足！",
+						duration:1000
+					})
+					return
+				}
 				uni.chooseImage({
 					count: 1,
 					sizeType: ['original', 'compressed'],
@@ -100,6 +123,9 @@
 							header: {
 								"Content-Type": "multipart/form-data"
 							},
+							formData:{
+								id:$that.userId
+							},
 							name: 'file', // 文件对应的key ，默认 为 file
 							success(res) {
 								const data = JSON.parse(res.data)
@@ -109,6 +135,27 @@
 									$that.result = data.result
 									$that.imgShow = true
 									console.log(data.result);
+									uni.request({
+										url: 'https://www.rainlotus.cc:5000/login',
+										method: "POST",
+										data: JSON.stringify({
+											"username": $that.username
+										}),
+										success(resp) {
+											if (resp.data.code === '200') {
+												uni.setStorageSync('token', resp.data.user)
+											} else {
+												uni.showToast({
+													title: 'oops,error'
+												})
+											}
+										},
+										fail() {
+											uni.showToast({
+												title: 'oops,error'
+											})
+										}
+									})
 								} else {
 									$that.result = data.msg
 									$that.imageSrc =
@@ -119,7 +166,10 @@
 								$that.isLoading = false
 							},
 							fail: () => {
-								uni.showToast("图片上传失败，请联系开发！")
+								uni.showToast({
+									title:"oops,error",
+									duration:1000
+								})
 								$that.isLoading = false
 							},
 						})
@@ -142,6 +192,7 @@
 				} else {
 					this.show = true
 				}
+				this.getRights()
 			},
 			open() {
 				// console.log('open');
